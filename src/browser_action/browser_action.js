@@ -18,7 +18,6 @@ tabTracker.controller('TabListCtrl', ['$scope', function($scope) {
     var deferred = $.Deferred();
     deferred.done(function(tabs) {
         $scope.tabs = tabs;
-        console.log($scope.tabs);
         $scope.$apply();
     });
 
@@ -39,4 +38,8 @@ tabTracker.controller('TabListCtrl', ['$scope', function($scope) {
     });
 }]);
 
+$(document).on('click', '.instapaper-clickable', function(e) {
+    console.log(e.target.dataset.url + ' added to instapaper');
+    var url = e.url;
+});
 
