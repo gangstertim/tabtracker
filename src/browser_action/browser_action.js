@@ -22,8 +22,13 @@ tabTracker.controller('TabListCtrl', ['$scope', function($scope) {
     });
 
     chrome.extension.sendRequest({greeting: "hello"}, function(response) {
+        var currentDatetime = new Date();
         tabs = $.map(response, function(value, index) {
             return [value];
+        });
+        tabs.forEach(function(tab) {
+            tab.date = tab.date;
+            //tab.date = tab.date + " seconds";
         });
         deferred.resolve(tabs);
     });
