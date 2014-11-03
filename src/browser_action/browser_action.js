@@ -1,16 +1,12 @@
 
 var tabTracker = angular.module('tabTracker', []);
-
-/*
-tabTracker.controller('TabListCtrl', function($scope) {
-    chrome.extension.sendRequest({greeting: "hello"}, function(response) {
-        $scope.tabs = $.map(response, function(value, index) {
-            return [value];
-        });
-        console.log($scope.tabs);
-    });
-});
-*/
+function secondsToString(seconds) {
+    var numdays = Math.floor((seconds % 31536000) / 86400); 
+    var numhours = Math.floor(((seconds % 31536000) % 86400) / 3600);
+    var numminutes = Math.floor((((seconds % 31536000) % 86400) % 3600) / 60);
+    var numseconds = (((seconds % 31536000) % 86400) % 3600) % 60;
+    return numdays + " days and " + numhours + " hours, " + numminutes + " minutes, and  " + numseconds + " seconds";
+}
 
 tabTracker.controller('TabListCtrl', ['$scope', function($scope) {
     var tabs;
@@ -26,9 +22,13 @@ tabTracker.controller('TabListCtrl', ['$scope', function($scope) {
         tabs = $.map(response, function(value, index) {
             return [value];
         });
+        tabs.sort(function(a, b) {
+            return a.date - b.date;
+        });
         tabs.forEach(function(tab) {
-            tab.date = tab.date;
-            //tab.date = tab.date + " seconds";
+            tab.date = currentDatetime.getTime() - new Date(tab.date).getTime();
+            tab.date/= 1000 //convert to seconds
+            tab.date = secondsToString(tab.date);
         });
         deferred.resolve(tabs);
     });
