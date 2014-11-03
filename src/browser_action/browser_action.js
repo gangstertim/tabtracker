@@ -1,8 +1,13 @@
-//something
 
-var allKeys;
-
-chrome.runtime.sendMessage({greeting: "hello"}, function(response) {
-    console.log(response);
+var tabTracker = angular.module('tabTracker', []);
+var tabs;
+chrome.extension.sendRequest({greeting: "hello"}, function(response) {
+    tabs = $.map(response, function(value, index) {
+        return [value];
+    });
 });
-console.log('hi');
+
+setTimeout(tabTracker.controller('TabListCtrl', function($scope) {
+    $scope.tabs = tabs;
+}), 1000);
+

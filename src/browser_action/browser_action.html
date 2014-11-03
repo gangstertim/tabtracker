@@ -1,24 +1,32 @@
 <!doctype html>
-<style type="text/css">
-	#mainPopup {
-		padding: 10px;
-		height: 200px;
-		width: 400px;
-		font-family: Helvetica, Ubuntu, Arial, sans-serif;
-	}
-	h1 {
-		font-size: 2em;
-	}
-</style>
+<html lang="en" ng-app="tabTracker">
+<head>
+    <style type="text/css">
+	    #mainPopup {
+		    padding: 10px;
+	    	height: 200px;
+    		width: 400px;
+		    font-family: Helvetica, Ubuntu, Arial, sans-serif;
+	    }
+    	h1 {
+		    font-size: 2em;
+	    }
+    </style>
+</head>    
 
-<div id="mainPopup">
-    <h1>Your Current Tabs</h1>
-    <ul>
-        <li id="t1">Tab one</li>
-        <li>Tab two</li>
-        <li>Tab three</li>
-    </ul>
-</div>
-<script src="../../js/jquery/jquery.min.js"></script>
-<script src="../../js/angular/angular.min.js"></script>
-<script src="browser_action.js"></script>
+<body ng-controller="TabListCtrl">
+    <div id="mainPopup">
+        <h1>Your Current Tabs</h1>
+        <ul>
+            <li ng-repeat="tab in tabs">
+                <span>{{tab.title}}</span>
+                <p>{{tab.date}}</p>
+            </li>
+        </ul>
+    </div>
+</body>
+    <p>Nothing here {{'yet' + '!'}}</p>
+    <script src="../../js/jquery/jquery.min.js"></script>
+    <script src="../../js/angular/angular.min.js"></script>
+    <script src="browser_action.js"></script>
+</html>
