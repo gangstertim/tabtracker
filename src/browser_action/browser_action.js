@@ -1,11 +1,16 @@
 
 var tabTracker = angular.module('tabTracker', []);
 function secondsToString(seconds) {
+    var datestring = '';
     var numdays = Math.floor((seconds % 31536000) / 86400); 
     var numhours = Math.floor(((seconds % 31536000) % 86400) / 3600);
     var numminutes = Math.floor((((seconds % 31536000) % 86400) % 3600) / 60);
-    var numseconds = (((seconds % 31536000) % 86400) % 3600) % 60;
-    return numdays + " days and " + numhours + " hours, " + numminutes + " minutes, and  " + numseconds + " seconds";
+    var numseconds = Math.floor((((seconds % 31536000) % 86400) % 3600) % 60);
+    if (numdays) { datestring += numdays + " days and "; }
+    if (numhours) { datestring += numhours + " hours, "; }
+    if (numminutes) { datestring += numminnutes + " minutes, and "; }
+    datestring += numseconds + " seconds";
+    return datestring;
 }
 
 tabTracker.controller('TabListCtrl', ['$scope', function($scope) {
