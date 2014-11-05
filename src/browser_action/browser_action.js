@@ -8,7 +8,7 @@ function secondsToString(seconds) {
     var numseconds = Math.floor((((seconds % 31536000) % 86400) % 3600) % 60);
     if (numdays) { datestring += numdays + " days and "; }
     if (numhours) { datestring += numhours + " hours, "; }
-    if (numminutes) { datestring += numminnutes + " minutes, and "; }
+    if (numminutes) { datestring += numminutes + " minutes, and "; }
     datestring += numseconds + " seconds";
     return datestring;
 }
@@ -24,7 +24,9 @@ tabTracker.controller('TabListCtrl', ['$scope', function($scope) {
     chrome.extension.sendRequest({greeting: "hello"}, function(response) {
         var currentDatetime = new Date();
         tabs = $.map(response, function(value, index) {
-            return [value];
+            if (value.title != "New Tab") { //hacky, must fix
+                return [value];
+            }
         });
         tabs.sort(function(a, b) {
             return a.date - b.date;
