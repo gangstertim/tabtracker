@@ -11,6 +11,7 @@ chrome.tabs.onRemoved.addListener(function(tabId) {
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
   var toStore = {};
   toStore[String(tabId)] = { 
+    id: tab.id,
     title: tab.title,
     date: Date(),
     url: tab.url

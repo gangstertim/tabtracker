@@ -52,20 +52,50 @@ tabTracker.controller('TabListCtrl', ['$scope', function($scope) {
   });
 }]);
 
-$(document).on('click', '.instapaper-clickable', function(e) {
-  console.log(e.target.dataset.url + ' added to instapaper');
-  var data = {
-    username: 'mrtimo',
-    password: 'instapaper25',
-    url: e.target.dataset.url
-  };
+$(document).on('mouseover', '.title', function(e) {
+  console.log('mouseover');
+});
 
-  $.post(ApiUrl, data)
-    .done(function() {
-      console.log('boom');
+$(document).on('click', '#open', function(e) {
+  chrome.tabs.update(parseInt(e.target.dataset.id), {highlighted: true});
+});
+
+$(document).on('click', '#close', function(e) {
+  chrome.tabs.remove(parseInt(e.target.dataset.id));
+  $(e.target).closest('li').remove();
+});
+
+$(document).on('click', '#instapaper-clickable', function(e) {
+  console.log(e.target.dataset.url + ' added to instapaper');
+
+  $.get('https://www.instapaper.com/api/authenticate', {
+    username: 'mrtimo',
+    password: 'instapaper25'
+  }).done(function() {
+    console.log('boom!');
+  }).fail(function() {
+    console.log('aww');
+  });
+
+  $.post(ApiUrl, {
+    username: 'mrtimo',
+    password: 'test',
+    url: e.target.dataset.url
+  }).done(function() {
+      $('#notifications').text('Tab added successfully!');
+      $('#notifications').css('background-color', 'green');
+      clearNotifications();
     }).fail(function() {
-    console.log('fail');
+      $('#notifications').text('Something went wrong')
+      $('#notifications').css('background-color', 'red');
+      clearNotifications();
     });
 
+  var clearNotifications = function() {
+    setTimeout(function() {
+      $('#notifications').text('');
+      $('#notifications').css('background-color', 'white');
+    }, 3000);
+  };
 });
 
