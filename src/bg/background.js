@@ -13,6 +13,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
   toStore[String(tabId)] = { 
     id: tab.id,
     title: tab.title,
+    windowId: tab.windowId,
     date: Date(),
     url: tab.url
   };

@@ -30,6 +30,8 @@ tabTracker.controller('TabListCtrl', ['$scope', function($scope) {
   first.done(function(currentTabIds) {
     chrome.extension.sendRequest({currentTabs: currentTabIds}, function(response) {
       var currentDatetime = new Date();
+      var otherTabs = [];
+      var currTabs = [];
       var tabs = $.map(response, function(value, index) {
         return [value];
       });
@@ -40,14 +42,21 @@ tabTracker.controller('TabListCtrl', ['$scope', function($scope) {
         tab.date = currentDatetime.getTime() - new Date(tab.date).getTime();
         tab.date/= 1000 //convert to seconds
         tab.date = secondsToString(tab.date);
+        debugger;
+        if (tab.windowId == chrome.windows.WINDOW_ID_CURRENT) {
+          currTabs.push(tab);
+        } else {
+          otherTabs.push(tab);
+        }
       });
 
-      second.resolve(tabs);
+      second.resolve([currTabs, otherTabs]);
     });
   });
 
   second.done(function(tabs) {
-    $scope.tabs = tabs;
+    $scope.currTabs = tabs[0];
+    $scope.otherTabs = tabs[1];
     $scope.$apply();
   });
 }]);
