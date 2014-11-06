@@ -15,6 +15,8 @@ function secondsToString(seconds) {
 }
 
 var tabTracker = angular.module('tabTracker', []);
+var currentWindow;
+chrome.windows.get(-2, function(t) {currentWindow = t.id});
 
 tabTracker.controller('TabListCtrl', ['$scope', function($scope) {
   var first = $.Deferred(), second = $.Deferred();
@@ -36,14 +38,15 @@ tabTracker.controller('TabListCtrl', ['$scope', function($scope) {
         return [value];
       });
 
+      console.log(tabs);
+      console.log(chrome.windows.WINDOW_ID_CURRENT);
       tabs.sort(function(a, b) {
         return a.date - b.date;
       }).forEach(function(tab) {
         tab.date = currentDatetime.getTime() - new Date(tab.date).getTime();
         tab.date/= 1000 //convert to seconds
         tab.date = secondsToString(tab.date);
-        debugger;
-        if (tab.windowId == chrome.windows.WINDOW_ID_CURRENT) {
+        if (tab.windowId == currentWindow) {
           currTabs.push(tab);
         } else {
           otherTabs.push(tab);
