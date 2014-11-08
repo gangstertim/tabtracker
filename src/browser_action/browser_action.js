@@ -1,6 +1,6 @@
 var addEndpoint = 'https://www.instapaper.com/api/add';
 var username = 'hungryhungrytimo@gmail.com';
-var password = password;
+var password = 'password';
 
 //Move this guy out to a util.js function eventually
 function secondsToString(seconds) {
@@ -17,7 +17,9 @@ function secondsToString(seconds) {
 }
 
 var tabTracker = angular.module('tabTracker', []);
+var $notifications = $('#notifications');
 var currentWindow;
+
 chrome.windows.get(-2, function(t) {currentWindow = t.id});
 
 tabTracker.controller('TabListCtrl', ['$scope', function($scope) {
@@ -40,8 +42,6 @@ tabTracker.controller('TabListCtrl', ['$scope', function($scope) {
         return [value];
       });
 
-      console.log(tabs);
-      console.log(chrome.windows.WINDOW_ID_CURRENT);
       tabs.sort(function(a, b) {
         return a.date - b.date;
       }).forEach(function(tab) {
@@ -80,27 +80,27 @@ $(document).on('click', '#close', function(e) {
 });
 
 $(document).on('click', '#instapaper-clickable', function(e) {
-  console.log(e.target.dataset.url + ' added to instapaper');
-
-  $.post(addEndpoint, {
-    username: 'username',
-    password: 'password',
-    url: e.target.dataset.url
-  }).done(function() {
-      $('#notifications').text('Tab added successfully!');
-      $('#notifications').css('background-color', 'green');
-      clearNotifications();
-    }).fail(function() {
-      $('#notifications').text('Something went wrong')
-      $('#notifications').css('background-color', 'red');
-      clearNotifications();
-    });
-
   var clearNotifications = function() {
     setTimeout(function() {
-      $('#notifications').text('');
-      $('#notifications').css('background-color', 'white');
+      $notifications.text('');
+      $notifications.css('background-color', 'white');
     }, 3000);
   };
+
+  $.post(addEndpoint, {
+    username: username,
+    password: password,
+    url: e.target.dataset.url
+  }).done(function() {
+    $notifications.text('Tab added successfully!');
+    chrome.tabs.remove(parseInt(e.target.dataset.id));
+    $(e.target).closest('li').remove();
+    $notifications.css('background-color', '#5D5');
+    clearNotifications();
+  }).fail(function() {
+    $notifications.text('Something went wrong')
+    $notifications.css('background-color', 'red');
+    clearNotifications();
+  });
 });
 
