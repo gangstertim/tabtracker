@@ -80,23 +80,26 @@ $(document).on('click', '#close', function(e) {
 });
 
 $(document).on('click', '#instapaper-clickable', function(e) {
-  var clearNotifications = function() {
-    setTimeout(function() {
-      $notifications.text('');
-      $notifications.css('background-color', 'white');
-    }, 3000);
+  function clearNotifications() {
+    $notifications.text('');
+    $notifications.css('background-color', 'white');
   };
+  var $this = $(this);
+  var url = e.target.dataset.url;
+  var id = parseInt(e.target.dataset.id);
 
   $.post(addEndpoint, {
     username: username,
     password: password,
-    url: e.target.dataset.url
+    url: url
   }).done(function() {
     $notifications.text('Tab added successfully!');
-    chrome.tabs.remove(parseInt(e.target.dataset.id));
-    $(e.target).closest('li').remove();
     $notifications.css('background-color', '#5D5');
-    clearNotifications();
+    $this.closest('li').remove();
+    setTimeout(function() {
+      chrome.tabs.remove(id);
+      clearNotifications();
+    }, 2500);
   }).fail(function() {
     $notifications.text('Something went wrong')
     $notifications.css('background-color', 'red');
