@@ -1,4 +1,6 @@
-var ApiUrl = 'https://www.instapaper.com/api/add'
+var addEndpoint = 'https://www.instapaper.com/api/add';
+var username = 'hungryhungrytimo@gmail.com';
+var password = password;
 
 //Move this guy out to a util.js function eventually
 function secondsToString(seconds) {
@@ -80,18 +82,9 @@ $(document).on('click', '#close', function(e) {
 $(document).on('click', '#instapaper-clickable', function(e) {
   console.log(e.target.dataset.url + ' added to instapaper');
 
-  $.get('https://www.instapaper.com/api/authenticate', {
-    username: 'mrtimo',
-    password: 'instapaper25'
-  }).done(function() {
-    console.log('boom!');
-  }).fail(function() {
-    console.log('aww');
-  });
-
-  $.post(ApiUrl, {
-    username: 'mrtimo',
-    password: 'test',
+  $.post(addEndpoint, {
+    username: 'username',
+    password: 'password',
     url: e.target.dataset.url
   }).done(function() {
       $('#notifications').text('Tab added successfully!');
